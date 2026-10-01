@@ -10,7 +10,17 @@ export default function ItemFavorito({ item, cores, onRemover, onEditar }) {
 
   async function handleSalvar() {
     if (observacao === item.observacao) return;
-    // TODO: chamar onEditar(item.id, observacao) e atualizar os estados salvando e feedback
+    setSalvando(true)
+    setFeedback(null)
+    try {
+      await onEditar(item.id, observacao)
+      setFeedback({tipo: "sucesso", texto: "Salvo!"})
+    } catch (e) {
+      setFeedback({tipo: "erro", texto: "Erro ao salvar"})
+    } finally{
+      setSalvando(false)
+      setTimeout(() => setFeedback(null), 2500)
+    }
   }
 
   function handleRemover() {
